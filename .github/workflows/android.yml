@@ -1,0 +1,20 @@
+name: Ghost Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Build APK
+        run: |
+          if [ -d "android" ]; then
+            chmod +x android/gradlew
+            cd android && ./gradlew assembleDebug
+          else
+            echo "No android folder yet"
+          fi

