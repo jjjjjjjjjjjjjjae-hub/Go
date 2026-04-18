@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ghost_browser</string>
+    <string name="title_activity_main">ghost_browser</string>
+    <string name="package_name">com.bro.ghost</string>
+    <string name="custom_url_scheme">com.bro.ghost</string>
+</resources>
