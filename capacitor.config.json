@@ -1,5 +1,10 @@
 {
   "appId": "com.bro.ghost",
-  "appName": "ghost_browser",
-  "webDir": "www"
+  "appName": "Ghost Browser",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  }
 }
